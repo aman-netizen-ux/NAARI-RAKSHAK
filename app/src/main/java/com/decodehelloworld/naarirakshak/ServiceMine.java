@@ -83,6 +83,7 @@ public class ServiceMine extends Service {
         });
 
     }
+    PendingIntent pendingIntent;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -97,11 +98,13 @@ public class ServiceMine extends Service {
                 this.stopSelf();
             }
         } else {
-
-
             Intent notificationIntent = new Intent(this, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                 pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+            }else{
+                 pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+            }
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel("MYID", "CHANNELFOREGROUND", NotificationManager.IMPORTANCE_DEFAULT);
 
